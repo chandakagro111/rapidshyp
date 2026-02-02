@@ -59,7 +59,7 @@ app.post('/api/rapidshyp/check', async (req, res) => {
       Pickup_pincode: `${parseInt(Pickup_pincode)}`,
       Delivery_pincode: `${parseInt(Delivery_pincode)}`,
       cod: cod,
-      total_order_value: `${parseInt(total_order_value)}`,
+      total_order_value: total_order_value,
       weight:parseFloat(weight)
     }
 
