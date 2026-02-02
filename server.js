@@ -26,10 +26,16 @@ app.get('/health', (req, res) => {
 // Main pincode serviceability check endpoint
 app.post('/api/rapidshyp/check', async (req, res) => {
   try {
-    const { pincode, weight, pickup_pincode, order_value } = req.body;
+    const { 
+      Pickup_pincode,
+      Delivery_pincode,
+      total_order_value,
+      cod,
+      weight
+     } = req.body;
 
     // Validate required fields
-    if (!pincode) {
+    if (!Delivery_pincode) {
       return res.status(400).json({
         success: false,
         message: 'Pincode is required'
@@ -43,30 +49,29 @@ app.post('/api/rapidshyp/check', async (req, res) => {
       });
     }
 
-    if (!pickup_pincode) {
+    if (!Pickup_pincode) {
       return res.status(400).json({
         success: false,
         message: 'Pickup pincode is required'
       });
     }
-
-    // Prepare RapidShyp API request
     const payload = {
-      to_pincode: parseInt(pincode),
-      from_pincode: parseInt(pickup_pincode),
-      weight: parseFloat(weight),
-      cod: order_value || 0
-    };
+      Pickup_pincode: `${parseInt(Pickup_pincode)}`,
+      Delivery_pincode: `${parseInt(Delivery_pincode)}`,
+      cod: cod,
+      total_order_value: `${parseInt(total_order_value)}`,
+      weight:parseFloat(weight)
+    }
 
     console.log('[RapidShyp API] Sending request with payload:', payload);
 
     // Call RapidShyp API
     const response = await axios.post(
-      'https://apiv2.rapidshyp.com/v1/serviceability/check',
+      'https://api.rapidshyp.com/rapidshyp/apis/v1/serviceabilty_check',
       payload,
       {
         headers: {
-          'Authorization': `Token ${RAPIDSHYP_API_KEY}`,
+          'rapidshyp-token': `${RAPIDSHYP_API_KEY}`,
           'Content-Type': 'application/json'
         }
       }
